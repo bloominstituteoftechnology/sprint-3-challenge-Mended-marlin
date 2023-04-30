@@ -47,43 +47,149 @@
     // 👉 CHALLENGE 1 - Integers
     class Integers {
       // 🧠 Constructor takes **any** number of arguments, which are integers
+      constructor(...nums) {
+        this.ints = [...nums];
+      }
+
+
       // 🧠 Instances have an `ints` property which is an array holding the integers above in the same order
+
+
       // 🧠 Implement a `getAll` method which returns the data held in the `ints` property
+
+      getAll() {
+        return this.ints
+      }
+
       // 🧠 Implement a `getEvens` method which returns an array with the integers that are even
+
+      getEvens() {
+        return this.ints.filter(num => Number.isSafeInteger(num/2))
+      }
       // 🧠 Implement a `getNegatives` method which returns an array with the integers that negative
+
+      getNegatives() {
+        return this.ints.filter(num => num < 0)
+      }
+
       // 🧠 Implement a `getAllSquared` method which returns an array with the integers squared
+
+      getAllSquared() {
+        let squaredArr = []
+        this.ints.forEach(num => {
+          num = num**2
+          squaredArr.push(num)
+        })
+        return squaredArr
+      }
+
       // 🧠 Implement a `pop` method which removes the last integer from `ints`  and returns it
+
+      pop() {
+        return this.ints.pop()
+      }
+
       // 🧠 Implement a `push` method which takes an int and pushes it to the end of `ints`, and returns the updated `ints` property
+
+      push(a) {
+        this.ints.push(a)
+        return this.ints
+      }
+
       // 🧠 Implement a `getEveryNth` method which takes an int `n` and returns an array with the ints at position 0, n, n + n, n + n + n, etc
+      getEveryNth(n) {
+        let nthArray = []
+        for (let i = 0; i < this.ints.length; i=i+n) {
+          
+          nthArray.push(this.ints[i])
+        }
+        return nthArray
+      }
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
+
+      getAllReversed() {
+        let reversedArr = []
+        for (let i = this.ints.length-1 ; i >= 0; i--) {
+          const num = this.ints[i];
+          reversedArr.push(num)
+        }
+        return reversedArr
+      }
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
 
     }
 
+
     // 👉 CHALLENGE 2 NerfGun
     class NerfGun {
       // 🧠 Constructor takes one argument: the total number of projectiles supported by the instance
+      constructor(projectiles) {
+        this.projectiles = projectiles
+        this.fullyLoaded = projectiles
+        this.safteyOn = true
+      }
       // 🧠 New instances initialize fully loaded and with the safety on
       // 🧠 Instances have a `shoot` method that takes no arguments:
-      //      * If there is ammo left and safety is off, method consumes one projectile and returns the string "Bang!"
+      //      * If there is ammo left and safety is off, method consumes one projectile and returns the string "Bang!
       //      * Shooting on empty or with the safety on, returns the string "Click!"
+
+      shoot(){
+        if ((this.projectiles > 0) && (this.safteyOn === false)){
+          this.projectiles--
+          return "Bang!"
+        }
+        else {
+          return "Click!"
+        }
+      }
       // 🧠 Instances have a `reload` method that takes a number and tops up the instance by that number
       //      * Reloading returns a string in the following format: "<number> projectiles left!"
       //      * Reloading by more than capacity fills the instance to capacity
       //      * Passing an argument which is not a number larger than zero returns the string "Error reloading!"
+      reload(amt) {
+        if ((amt > 0) && (typeof amt === "number")) {
+          if (this.projectiles + amt > this.fullyLoaded){
+            this.projectiles = this.fullyLoaded
+            return `${this.projectiles} projectiles left!`
+          }
+          else{
+            this.projectiles += amt 
+            return `${this.projectiles} projectiles left!`
+          }
+          
+        }
+        else {
+          return "Error reloading!"
+        }
+      }
       // 🧠 Instances have a `toggleSafety` method that takes no arguments and switches the state of the safety
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
+      toggleSafety() {
+        this.safteyOn = !this.safteyOn
+        return this.safteyOn ? "Safety enabled!" : "Safety disabled!"
+      }
 
     }
 
     // 👉 CHALLENGE 3 EBook
     class EBook {
+      
       // 🧠 Constructor takes two arguments:
       //      * First arg is a string with the whole text of the book
       //      * Second arg is the number of characters contained in a single page of the book
+      constructor(bookText, charPerPage) {
+        this.onPage = 0
+        this.startChar = 0
+        this.endChar  = 0
+        this.bookText = bookText
+        this.charPerPage = charPerPage
+        this.book = []
+
+        
+      }
       // 🧠 Instances have a `next` method:
       //      * It takes no args and returns the next page of the book
       //      * If the next page is empty because we have reached the end, return null instead
@@ -95,7 +201,30 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method of arrays
       // ❗ Feel free to implement `back`, although this is not required nor graded
+      
+      next() {
+        
+        this.endChar += this.charPerPage
+       
+        
+        let page = this.bookText.slice(this.startChar, this.endChar)
+        
+        this.startChar += this.charPerPage
+        if (page.length === 0) {
+          page = null
+        }
+        
+        this.book.push(page)
+        this.onPage++
+        
+        return page
+          
+      }
 
+      back() {
+        this.onPage--
+        return this.book[this.onPage]
+      }
     }
 
     // 👉 CHALLENGE 4 AntFarm
@@ -103,16 +232,87 @@
       // 🧠 Constructor takes **any** number of arguments, which are strings: the names of your ants
       // 🧠 Instances of AntFarm have an `ants` property holding an array of ants:
       //      * Each ant is an object with a `name` prop and a `health` prop that starts at 100
+      constructor(...antNames) {
+        this.antNames = [...antNames]
+        this.ants = []
+        this.antNames.forEach(ant => {
+          this.ants.push({
+            name: ant, 
+            health: 100
+          })
+        })
+      }
+      
       // 🧠 Instances of AntFarm have a `work` method:
       //      * When invoked your ants do chores at a cost of 20 health points each
       //      * The method takes no arguments and returns the string "<ant number> ants starting work!"
       //      * If the `health` of any ant decreases to zero or below, it dies and is removed from `ants`
       //      * If `ants` contains no ants, the method returns "No ants here. Did you work them to death?"
+
+      work() {
+        let counter = 0
+        this.ants.forEach((ant) => {
+          if (ant.health > 0){
+            counter++
+          }
+          ant.health -= 20
+        })
+        
+        for (let i = 0; i < this.ants.length; i++) {
+          const ant = this.ants[i];
+          if (ant.health <= 0) {
+            this.ants.splice(i)
+          }
+        }
+        
+
+
+        if (counter > 0) {
+            return `${counter} ants starting work!`
+          }
+        if (counter <= 0){
+            return `No ants here. Did you work them to death?`
+          }
+        
+      }
       // 🧠 Instances of AntFarm have a `feed` method:
       //      * The method takes as its only argument the name of the particular ant(s) to feed
       //      * When invoked, the ant(s) by the given name obtain a health increase of 15 points
       //      * The method returns the string "Yum!" if any ants by the given name exist
       //      * The method returns the string "<ant name> not found!" if no ants by the given name exist
+
+      feed(...antName) {
+        let luckyAnts = [...antName]
+        let counter = 0
+        let missingAnt 
+
+        for (let i = 0; i < luckyAnts.length; i++) {
+          const antName = luckyAnts[i];
+          this.ants.forEach((ant,i) => {
+            if (ant.name === antName) {
+              ant.health += 15
+              counter++
+            }
+            if (ant.name != antName){
+              missingAnt = antName
+            }
+          })
+        }
+
+
+        if (counter === luckyAnts.length){
+          return "Yum!"
+        }
+        if (counter !== luckyAnts.length){
+          return `${missingAnt} not found!`
+        }
+  
+
+      }
+
+
+
+
       // 🌟 Example:
       //      const farm = new AntFarm('Jess', 'Blake');
       //      farm.ants;         // evaluates to [{name: 'Jess', health: 100}, {name: 'Blake', health: 100}]
