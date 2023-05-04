@@ -284,28 +284,25 @@
       feed(...antName) {
         let luckyAnts = [...antName]
         let counter = 0
-        let missingAnt 
-
-        for (let i = 0; i < luckyAnts.length; i++) {
-          const antName = luckyAnts[i];
-          this.ants.forEach((ant,i) => {
-            if ((ant.name.toLowerCase()) === (antName.toLowerCase())) {
-              ant.health += 15
+        let lA
+        this.ants.forEach(ant => { 
+            lA = luckyAnts.map(name => {
+            if (ant.name === name ){
               counter++
+              ant.health += 15
             }
-            if ((ant.name.toLowerCase()) != (antName.toLowerCase())){
-              missingAnt = antName
+            else {
+              if (counter === luckyAnts.length){
+                return "Yum!"
+              }
+              return `${name} not found!`
             }
           })
-        }
+          
+        })
 
-
-        if (counter === luckyAnts.length){
-          return "Yum!"
-        }
-        if (counter !== luckyAnts.length){
-          return `${missingAnt} not found!`
-        }
+    
+return lA.toString()      
   
 
       }
